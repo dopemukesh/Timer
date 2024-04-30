@@ -1,0 +1,131 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: poppins;
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+    background: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#timer-display{
+    /* background: #000; */
+    display: flex;
+    gap: .2rem;
+}
+
+#timer-display h1{
+    font-size: 224px;
+    background: #222;
+    padding: .1rem 1rem;
+    border-radius: .8rem;
+    user-select: none;
+    min-width: 296px;
+    min-height: 336px;
+}
+
+.btns{
+    /* background: green; */
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem 0;
+}
+
+.btns button{
+    background: #222;
+    padding: .5rem 2rem;
+    color: #fff;
+    border: none;
+    border-radius: .5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding: 100px 0; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+    /* background: red; */
+}
+
+.modal-content {
+	background-color: #222;
+	margin: 10% auto;
+	padding: 1rem 2rem;
+	border: 1px solid #888;
+	width: fit-content;
+    max-height: 300px;
+    overflow-y: auto;
+    /* color: #222; */
+    border-radius: 1rem;
+    scroll-behavior: smooth;
+}
+
+/* Customize scrollbar */
+.modal-content::-webkit-scrollbar {
+    width: 0; /* Hide scrollbar width */
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Hide scrollbar thumb */
+}
+
+ol{
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+ol li{
+    background: #333;
+    padding: .8rem 1rem;
+    border-radius: .3rem;
+    list-style: none;
+}
+
+
+#close-modal-button {
+	background-color: #00dc6a;
+	color: #fff;
+	padding: .5rem 2rem;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+    margin-top: 1rem;
+}
+
+#close-modal-button:hover {
+	background-color: #00b959;
+}
+
+#clear-modal-button {
+	background-color: #ff0000;
+	color: #fff;
+	padding: .5rem 2rem;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+    margin-top: 1rem;
+}
+
+#clear-modal-button:hover {
+	background-color: #d20000;
+}
+
