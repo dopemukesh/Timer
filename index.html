@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Timer</title>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-	
-	<label for="hours">Hours:</label>
-	<input type="number" id="hours" min="0" max="23">
-	<label for="minutes">Minutes:</label>
-	<input type="number" id="minutes" min="0" max="59">
-	<label for="seconds">Seconds:</label>
-	<input type="number" id="seconds" min="0" max="59">
-	<button id="start-button">Start</button>
-	<button id="reset-button">Reset</button>
 
     <div id="timer-display">
         <h1 class="hours">00</h1>
@@ -23,6 +16,22 @@
         <h1 class="seconds">00</h1>
     </div>
 
+    <div class="btns">
+        <button id="start-button">Start</button>
+        <button id="stop-button">Stop</button>
+        <button id="reset-button">Reset</button>
+        <button id="history-button">History</button>
+    </div>
+	<div id="timer-history-modal" class="modal">
+		<div class="modal-content">
+			<h2>Timer History</h2>
+			<ol id="timer-history-list"></ol>
+			<button id="clear-modal-button">Clear</button>
+			<button id="close-modal-button">Close</button>
+		</div>
+	</div>
+
 </body>
-<!-- <script src="script.js"></script> -->
+<script src="incrementTimer.js"></script>
+
 </html>
