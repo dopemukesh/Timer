@@ -6,30 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timer</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mediaQuerys.css">
 </head>
 
 <body>
 
-    <div id="timer-display">
-        <h1 class="hours">00</h1>
-        <h1 class="minutes">00</h1>
-        <h1 class="seconds">00</h1>
+    <div id="timer-box">
+        <div id="timer-display">
+            <h1 class="hours">00</h1>
+            <h1 class="minutes">00</h1>
+            <h1 class="seconds">00</h1>
+        </div>
+
+        <div class="btns">
+            <button id="start-button">Start</button>
+            <button id="stop-button">Stop</button>
+            <button id="reset-button">Reset</button>
+            <button id="history-button">History</button>
+        </div>
     </div>
 
-    <div class="btns">
-        <button id="start-button">Start</button>
-        <button id="stop-button">Stop</button>
-        <button id="reset-button">Reset</button>
-        <button id="history-button">History</button>
+    <div id="timer-history-modal" class="modal">
+        <div class="modal-content">
+            <h2>Timer History</h2>
+            <div class="content-box">
+                <ol id="timer-history-list"></ol>
+                <button id="clear-modal-button">Clear</button>
+                <button id="close-modal-button">Close</button>
+            </div>
+        </div>
     </div>
-	<div id="timer-history-modal" class="modal">
-		<div class="modal-content">
-			<h2>Timer History</h2>
-			<ol id="timer-history-list"></ol>
-			<button id="clear-modal-button">Clear</button>
-			<button id="close-modal-button">Close</button>
-		</div>
-	</div>
 
 </body>
 <script src="incrementTimer.js"></script>

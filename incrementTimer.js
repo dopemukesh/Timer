@@ -1,49 +1,51 @@
-
-
+// Get DOM elements
 let timerDisplay = document.getElementById('timer-display');
 let timerDisplayH = document.querySelector('.hours');
 let timerDisplayM = document.querySelector('.minutes');
 let timerDisplayS = document.querySelector('.seconds');
 
+// Buttons
 let startButton = document.getElementById('start-button');
 let stopButton = document.getElementById('stop-button');
 let resetButton = document.getElementById('reset-button');
 let historyButton = document.getElementById('history-button');
 
+// Modal elements
 let timerHistoryModal = document.getElementById('timer-history-modal');
 let timerHistoryList = document.getElementById('timer-history-list');
 let closeModalButton = document.getElementById('close-modal-button');
 
+// Timer variables
 let timerId = null;
 let timerSeconds = 0;
 let timerHistory = [];
 
+// Variables to store stopped time
 let stoppedHours = 0;
 let stoppedMinutes = 0;
 let stoppedSeconds = 0;
 
-// let counter = 1;
-
+// Event listeners for buttons
 startButton.addEventListener('click', startTimer);
 stopButton.addEventListener('click', stopTimer);
 resetButton.addEventListener('click', resetTimer);
 historyButton.addEventListener('click', openModal);
 closeModalButton.addEventListener('click', closeModal);
 
-
+// Function to start the timer
 function startTimer() {
 	if (!timerId) {
 		timerId = setInterval(decrementTimer, 1000);
 	}
 }
 
-
+// Function to stop the timer
 function stopTimer() {
     clearInterval(timerId);
     timerId = null;
 }
 
-
+// Function to decrement the timer
 function decrementTimer() {
     timerSeconds++;
     let hours = Math.floor(timerSeconds / 3600);
@@ -55,18 +57,17 @@ function decrementTimer() {
     timerDisplayS.textContent = `${seconds.toString().padStart(2, '0')}`;
 }
 
-
-// Initialize counter with the value stored in localStorage or default to 1
+// Counter for timer history
 let counter = localStorage.getItem('timerCounter') ? parseInt(localStorage.getItem('timerCounter')) : 1;
+// Function to save the counter in localStorage
 function saveCounter() {
     localStorage.setItem('timerCounter', counter.toString());
 }
 
-
+// Function to reset the timer
 function resetTimer() {
-     // Check if the timer is already stopped
     if (timerId === null) {
-        return; // If the timer is stopped, exit the function
+        return;
     }
 
     clearInterval(timerId);
@@ -76,7 +77,6 @@ function resetTimer() {
     const stoppedMinutes = timerDisplayM.textContent;
     const stoppedSeconds = timerDisplayS.textContent;
 
-    // Get current time
     const stoppedTime = formatCurrentTime(new Date());
 
     timerSeconds = 0;
@@ -84,7 +84,6 @@ function resetTimer() {
     timerDisplayM.textContent = '00';
     timerDisplayS.textContent = '00';
 
-    // Store timer history
     timerHistory.push(`${counter}. Timer stopped after ${stoppedHours}:${stoppedMinutes}:${stoppedSeconds} at ${stoppedTime}`);
     localStorage.setItem('timerHistory', JSON.stringify(timerHistory));
 
@@ -92,22 +91,20 @@ function resetTimer() {
     saveCounter();
 }
 
-
 // Function to load timer history from localStorage
 function loadTimerHistory() {
     const storedHistory = localStorage.getItem('timerHistory');
     if (storedHistory) {
         timerHistory = JSON.parse(storedHistory);
     } else {
-        timerHistory = []; // Initialize timer history array if it doesn't exist
+        timerHistory = [];
     }
 }
 
 // Call the function to load timer history when the page loads
 window.addEventListener('load', loadTimerHistory);
 
-
-// Function to format current time as "Day Mon DD YYYY HH:MM:SS AM/PM || GMT+Timezone"
+// Function to format current time
 function formatCurrentTime(currentTime) {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -117,7 +114,7 @@ function formatCurrentTime(currentTime) {
     let seconds = currentTime.getSeconds();
     let ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
-    hours = hours ? hours : 12; // 12 hour format
+    hours = hours ? hours : 12;
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
 
@@ -134,9 +131,9 @@ function formatCurrentTime(currentTime) {
     return `${day} ${month} ${date} ${year} ${hours}:${minutes}:${seconds} ${ampm} || ${timezone}`;
 }
 
-
+// Function to open the modal
 function openModal() {
-	timerHistoryModal.style.display = 'block';
+	timerHistoryModal.style.display = 'flex';
 	const storedHistory = localStorage.getItem('timerHistory');
 	if (storedHistory) {
 		timerHistory = JSON.parse(storedHistory);
@@ -145,24 +142,20 @@ function openModal() {
 	}
 }
 
+// Function to close the modal
 function closeModal() {
 	timerHistoryModal.style.display = 'none';
 }
 
-
-// Add event listener to the "Clear" button
+// Clear button event listener
 const clearButton = document.getElementById('clear-modal-button');
 clearButton.addEventListener('click', clearHistory);
 
 // Function to clear the timer history
 function clearHistory() {
-    // Clear the timer history array
     timerHistory = [];
-    // Clear the history displayed in the modal
     timerHistoryList.innerHTML = '';
-    // Remove the timer history data from localStorage
     localStorage.removeItem('timerHistory');
     counter = 1;
-    // Remove the counter data from localStorage
     localStorage.removeItem('timerCounter');
 }
