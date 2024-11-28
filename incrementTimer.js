@@ -1,161 +1,153 @@
-// Get DOM elements
-let timerDisplay = document.getElementById('timer-display');
-let timerDisplayH = document.querySelector('.hours');
-let timerDisplayM = document.querySelector('.minutes');
-let timerDisplayS = document.querySelector('.seconds');
+// DOM Elements
+const timerDisplayH = document.querySelector('.hours');
+const timerDisplayM = document.querySelector('.minutes');
+const timerDisplayS = document.querySelector('.seconds');
+const startButton = document.getElementById('start-button');
+const stopButton = document.getElementById('stop-button');
+const resetButton = document.getElementById('reset-button');
+const historyButton = document.getElementById('history-button');
+const closeModalButton = document.getElementById('close-modal-button');
+const clearButton = document.getElementById('clear-modal-button');
+const timerHistoryModal = document.getElementById('timer-history-modal');
+const timerHistoryList = document.getElementById('timer-history-list');
 
-// Buttons
-let startButton = document.getElementById('start-button');
-let stopButton = document.getElementById('stop-button');
-let resetButton = document.getElementById('reset-button');
-let historyButton = document.getElementById('history-button');
+// const timeElement = document.getElementById('realtime');
 
-// Modal elements
-let timerHistoryModal = document.getElementById('timer-history-modal');
-let timerHistoryList = document.getElementById('timer-history-list');
-let closeModalButton = document.getElementById('close-modal-button');
-
-// Timer variables
+// Timer and History Variables
 let timerId = null;
 let timerSeconds = 0;
-let timerHistory = [];
+let timerHistory = JSON.parse(localStorage.getItem('timerHistory')) || [];
+let counter = parseInt(localStorage.getItem('timerCounter')) || 1;
 
-// Variables to store stopped time
-let stoppedHours = 0;
-let stoppedMinutes = 0;
-let stoppedSeconds = 0;
 
-// Event listeners for buttons
-startButton.addEventListener('click', startTimer);
-stopButton.addEventListener('click', stopTimer);
-resetButton.addEventListener('click', resetTimer);
-historyButton.addEventListener('click', openModal);
-closeModalButton.addEventListener('click', closeModal);
+function update_realTime() {
+    const timeElement = document.getElementById('realtime');
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
 
-// Function to start the timer
-function startTimer() {
-	if (!timerId) {
-		timerId = setInterval(decrementTimer, 1000);
-	}
+
+    // Add leading zero if the value is less than 10
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12 || 12;
+
+    // Update the time display
+    timeElement.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
 }
 
-// Function to stop the timer
+// Update the time every second (1000ms)
+setInterval(update_realTime, 1000);
+
+// Initial time update
+update_realTime();
+
+
+
+// Timer Functions
+function startTimer() {
+    if (!timerId) timerId = setInterval(updateTimer, 1000);
+}
+
 function stopTimer() {
     clearInterval(timerId);
     timerId = null;
 }
 
-// Function to decrement the timer
-function decrementTimer() {
-    timerSeconds++;
-    let hours = Math.floor(timerSeconds / 3600);
-    let minutes = Math.floor((timerSeconds % 3600) / 60);
-    let seconds = timerSeconds % 60;
+function resetTimer() {
+    if (timerId) stopTimer(); // Stop if running
 
-    timerDisplayH.textContent = `${hours.toString().padStart(2, '0')}`;
-    timerDisplayM.textContent = `${minutes.toString().padStart(2, '0')}`;
-    timerDisplayS.textContent = `${seconds.toString().padStart(2, '0')}`;
+    const stoppedTime = formatTimeDisplay(timerSeconds);
+    addToHistory(`Timer stopped after ${stoppedTime}`);
+
+    timerSeconds = 0;
+    updateDisplay(0, 0, 0);
 }
 
-// Counter for timer history
-let counter = localStorage.getItem('timerCounter') ? parseInt(localStorage.getItem('timerCounter')) : 1;
-// Function to save the counter in localStorage
-function saveCounter() {
+function updateTimer() {
+    timerSeconds++;
+    const hours = Math.floor(timerSeconds / 3600);
+    const minutes = Math.floor((timerSeconds % 3600) / 60);
+    const seconds = timerSeconds % 60;
+    updateDisplay(hours, minutes, seconds);
+
+}
+
+function updateDisplay(hours, minutes, seconds) {
+    timerDisplayH.textContent = hours.toString().padStart(2, '0');
+    timerDisplayM.textContent = minutes.toString().padStart(2, '0');
+    timerDisplayS.textContent = seconds.toString().padStart(2, '0');
+}
+
+// History Functions
+function addToHistory(entry) {
+    const timestamp = formatCurrentTime(new Date());
+    const historyEntry = `${counter++}. ${entry} at ${timestamp}`;
+    timerHistory.push(historyEntry);
+
+    localStorage.setItem('timerHistory', JSON.stringify(timerHistory));
     localStorage.setItem('timerCounter', counter.toString());
 }
 
-// Function to reset the timer
-function resetTimer() {
-    if (timerId === null) {
-        return;
-    }
-
-    clearInterval(timerId);
-    timerId = null;
-
-    const stoppedHours = timerDisplayH.textContent;
-    const stoppedMinutes = timerDisplayM.textContent;
-    const stoppedSeconds = timerDisplayS.textContent;
-
-    const stoppedTime = formatCurrentTime(new Date());
-
-    timerSeconds = 0;
-    timerDisplayH.textContent = '00';
-    timerDisplayM.textContent = '00';
-    timerDisplayS.textContent = '00';
-
-    timerHistory.push(`${counter}. Timer stopped after ${stoppedHours}:${stoppedMinutes}:${stoppedSeconds} at ${stoppedTime}`);
-    localStorage.setItem('timerHistory', JSON.stringify(timerHistory));
-
-    counter++;
-    saveCounter();
+function showHistory() {
+    timerHistoryModal.style.display = 'flex';
+    timerHistoryList.innerHTML = timerHistory.map(entry => `<li>${entry}</li>`).join('');
 }
 
-// Function to load timer history from localStorage
-function loadTimerHistory() {
-    const storedHistory = localStorage.getItem('timerHistory');
-    if (storedHistory) {
-        timerHistory = JSON.parse(storedHistory);
-    } else {
-        timerHistory = [];
-    }
+function clearHistory() {
+    timerHistory = [];
+    counter = 1;
+    localStorage.removeItem('timerHistory');
+    localStorage.removeItem('timerCounter');
+    timerHistoryList.innerHTML = '';
 }
 
-// Call the function to load timer history when the page loads
-window.addEventListener('load', loadTimerHistory);
+function closeModal() {
+    timerHistoryModal.style.display = 'none';
+}
 
-// Function to format current time
-function formatCurrentTime(currentTime) {
+// Utility Functions
+function formatTimeDisplay(seconds) {
+    const hours = Math.floor(seconds / 3600).toString().padStart(2, '0');
+    const minutes = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${secs}`;
+}
+
+function formatCurrentTime(date) {
+    // Convert to IST (India Standard Time)
+    const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC +5:30
+    const istDate = new Date(date.getTime() + istOffset);
+
+    // Format the date and time
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    let hours = currentTime.getHours();
-    let minutes = currentTime.getMinutes();
-    let seconds = currentTime.getSeconds();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
+    const day = days[istDate.getUTCDay()];
+    const month = months[istDate.getUTCMonth()];
+    const dateStr = istDate.getUTCDate();
+    const year = istDate.getUTCFullYear();
 
-    const timeZoneOffset = currentTime.getTimezoneOffset();
-    const timeZoneOffsetHours = Math.floor(Math.abs(timeZoneOffset / 60));
-    const timeZoneOffsetMinutes = Math.abs(timeZoneOffset) % 60;
-    const timezone = timeZoneOffset >= 0 ? `GMT-${timeZoneOffsetHours}:${timeZoneOffsetMinutes}` : `GMT+${timeZoneOffsetHours}:${timeZoneOffsetMinutes}`;
+    let hours = istDate.getUTCHours();
+    const minutes = istDate.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = istDate.getUTCSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
 
-    const day = days[currentTime.getDay()];
-    const month = months[currentTime.getMonth()];
-    const date = currentTime.getDate();
-    const year = currentTime.getFullYear();
+    // Convert hours to 12-hour format
+    hours = hours % 12 || 12;
 
-    return `${day} ${month} ${date} ${year} ${hours}:${minutes}:${seconds} ${ampm} || ${timezone}`;
+    return `${day}, ${month} ${dateStr}, ${year} ${hours}:${minutes}:${seconds} ${ampm}`;
 }
 
-// Function to open the modal
-function openModal() {
-	timerHistoryModal.style.display = 'flex';
-	const storedHistory = localStorage.getItem('timerHistory');
-	if (storedHistory) {
-		timerHistory = JSON.parse(storedHistory);
-		const historyList = timerHistory.map((entry, index) => `<li>${entry}</li>`).join('');
-		timerHistoryList.innerHTML = historyList;
-	}
-}
 
-// Function to close the modal
-function closeModal() {
-	timerHistoryModal.style.display = 'none';
-}
-
-// Clear button event listener
-const clearButton = document.getElementById('clear-modal-button');
+// Event Listeners
+startButton.addEventListener('click', startTimer);
+stopButton.addEventListener('click', stopTimer);
+resetButton.addEventListener('click', resetTimer);
+historyButton.addEventListener('click', showHistory);
+closeModalButton.addEventListener('click', closeModal);
 clearButton.addEventListener('click', clearHistory);
-
-// Function to clear the timer history
-function clearHistory() {
-    timerHistory = [];
-    timerHistoryList.innerHTML = '';
-    localStorage.removeItem('timerHistory');
-    counter = 1;
-    localStorage.removeItem('timerCounter');
-}

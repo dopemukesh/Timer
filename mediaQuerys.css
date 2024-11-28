@@ -1,25 +1,81 @@
+/* Responsive Styles */
 
 @media screen and (max-width: 480px) {
-    #timer-box{
-        transform: rotate(90deg);
+    #timer-display {
+        display: grid;
+        place-items: center;
+        gap: 1rem;
+        padding-top: 2rem;
     }
 
-    #timer-display h1{
-        max-width: 226px;
-        max-height: 226px;
-        display: flex;
+    #timer-display h1 {
         font-size: 176px;
+        max-width: 186px;
+        max-height: 186px;
+        padding: 1rem;
+        width: 100%;
+        line-height: 156px;
+    }
+
+    .btns {
+        gap: 1rem;
+    }
+
+    .btns button {
+        padding: .5rem 1.5rem;
+    }
+
+    .content-box {
         padding: 1rem;
     }
-
 }
 
-@media screen and (min-width: 480px) and (max-width: 768px) {
-
-    #timer-display h1{
-        max-width: 226px;
-        max-height: 226px;
-        font-size: 186px;
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    #timer-display {
+        display: grid;
+        place-items: center;
+        gap: 1rem;
     }
 
+    #timer-display h1 {
+        font-size: 186px;
+        max-width: 226px;
+        max-height: 226px;
+    }
+
+    .btns {
+        gap: 1.5rem;
+    }
+
+    .btns button {
+        padding: .5rem 1.8rem;
+    }
+
+    .content-box {
+        padding: 1.2rem 1.5rem;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    #timer-display {
+        gap: 1.5rem;
+    }
+
+    #timer-display h1 {
+        font-size: 256px;
+        max-width: 296px;
+        max-height: 296px;
+    }
+
+    .btns {
+        gap: 2rem;
+    }
+
+    .btns button {
+        padding: .5rem 2rem;
+    }
+
+    .content-box {
+        padding: 1.5rem 2rem;
+    }
 }

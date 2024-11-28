@@ -8,26 +8,45 @@
 body {
     width: 100vw;
     height: 100vh;
-    background: #000;
-    color: #fff;
+    background: #080a11;
+    color: #deeeff;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.realTime{
+    /* background: red; */
+    display: flex;
+    justify-content: end;
+    user-select: none;
+    /* width: fit-content; */
+}
+
+.realTime p{
+    padding: .4rem;
+    font-size: 18px;
+    font-weight: 700;
+    /* background: green; */
+    border-radius: 4px;
+}
 #timer-display {
     display: flex;
-    gap: .2rem;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 #timer-display h1 {
-    font-size: 224px;
-    background: #222;
-    padding: .1rem 1rem;
+    font-family: 'Bebas', sans-serif;
+    font-size: 256px;
+    background: #151a23;
+    padding: 1rem 1rem 2rem 1rem;
     border-radius: .8rem;
     user-select: none;
     width: 296px;
-    height: 296px;
+    line-height: 256px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,10 +57,11 @@ body {
     justify-content: center;
     gap: 2rem;
     margin: 1rem 0;
+    flex-wrap: wrap;
 }
 
 .btns button {
-    background: #222;
+    background: #151a23;
     padding: .5rem 2rem;
     color: #fff;
     border: none;
@@ -61,16 +81,19 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #151a23c1;
     align-items: center;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     justify-content: center;
 }
 
 .modal-content {
-    background-color: #222;
+    background-color: #080a11;
     margin: 0 1rem;
-    border: 1px solid #888;
-    width: fit-content;
+    border: 2px solid #242a3d;
+    width: 90%;
+    max-width: 656px;
     max-height: 300px;
     overflow-y: auto;
     border-radius: 1rem;
@@ -81,7 +104,7 @@ body {
 .modal-content h2 {
     position: sticky;
     top: 0;
-    background: #222;
+    background: #151a23;
     padding: .5rem 1rem;
 }
 
@@ -104,15 +127,17 @@ ol {
 }
 
 ol li {
-    background: #333;
+    background: #151a23;
     padding: .8rem 1rem;
     border-radius: .3rem;
+    border: 1px solid #242a3d;
     list-style: none;
 }
 
-.content-box button{
-    background-color: #006adc;
+.content-box button {
+    background-color: #0284c7;
     color: #fff;
+    font-weight: 800;
     padding: .5rem 2rem;
     border: none;
     border-radius: 5px;
@@ -121,13 +146,14 @@ ol li {
 }
 
 #close-modal-button:hover {
-    background-color: #0091ff;
+    background-color: #0ea5e9;
 }
 
-#clear-modal-button{
-    background-color: #cf0000;
+#clear-modal-button {
+    background-color: #e11d48;
 }
 
 #clear-modal-button:hover {
-    background-color: #ff0000;
+    background-color: #f43f5e;
 }
+
